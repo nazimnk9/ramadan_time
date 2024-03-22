@@ -1,0 +1,175 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* ------------start---------- */
+
+#ramadan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#ramadan .img{
+    position: relative;
+}
+
+.logo{
+    position: absolute;
+    top: 5px;
+    left: 55%;
+    transform: translateX(-50%);
+}
+
+.logo img{
+    width: 72%;
+}
+
+.main{
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+
+.main h1{
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.main h3{
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.counter{
+    display: flex;
+    gap: 8px;
+}
+
+.count{
+    text-align: center;
+}
+
+.count .time{
+    display: inline-block;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    font-size: 35px;
+    padding: 5px 35px;
+    border-radius: 5px;
+    background: #0013cb;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.count p{
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.namaz_time{
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+}
+
+.namaz_time .details{
+    text-align: center;
+    margin-top: 32px;
+    position: relative;
+}
+
+.namaz_time .details::after{
+    width: 37px;
+    height: 2px;
+    background: #777;
+    position: absolute;
+    top: -52%;
+    left: 50%;
+    content: "";
+    transform: translate(44%,50%);
+}
+
+.namaz_time .details:last-child::after{
+    display: none;
+}
+
+.details input[type="radio"]{
+    display: none;
+}
+  
+.details h5{
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.details .timing{
+    font-family: "Open Sans", sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+  
+.details h5::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 2px solid #777;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    transition: border-color 400ms ease;
+}
+  
+.details h5::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #8eff8a;
+    border: 2px solid #8eff8a;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0);
+    transition: transform 400ms ease;
+}
+  
+input[type="radio"]:checked + h5::before {
+    border-color: #8eff8a;
+}
+  
+input[type="radio"]:checked + h5::after {
+    transform: translateY(-50%) scale(1);
+}
+
+.details.active h5::before {
+    background-color: #8eff8a; /* Change to your desired color */
+    border-color: #8eff8a;
+}
+
+
+
+/* -------------End------------- */
