@@ -170,6 +170,11 @@ input[type="radio"]:checked + h5::after {
     border-color: #8eff8a;
 }
 
+/* separate individual class */
+.active {
+    background-color: #8eff8a;
+    border-color: #8eff8a;
+}
 
 
 /* -------------End------------- */
