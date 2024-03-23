@@ -1,5 +1,33 @@
+const prayerTimes = [
+    { name: "FAJR", time: "4:47AM" },
+    { name: "DHUHR", time: "12:09PM" },
+    { name: "ASR", time: "5:21PM" },
+    { name: "MAGHRIB", time: "6:14PM" },
+    { name: "ESHA", time: "7:26PM" },
+];
+
+let prayerTimes1;
+
+// Function to update prayer times
+function updatePrayerTimes() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const date = today.getDate();
+
+    const fajar = new Date(year, month, date, 4, 47, 0, 0);
+    const dhuhr = new Date(year, month, date, 12, 9, 0, 0);
+    const asr = new Date(year, month, date, 12 + 5, 21, 0, 0);
+    const magrib = new Date(year, month, date, 12 + 6, 14, 0, 0);
+    const esha = new Date(year, month, date, 12 + 7, 26, 0, 0);
+
+    prayerTimes1 = [fajar.getTime(), dhuhr.getTime(), asr.getTime(), magrib.getTime(), esha.getTime()];
+}
+
 // Function to update the countdown timer
 function updateTimer() {
+    updatePrayerTimes();
+
     const now = new Date();
     const iftarTime = new Date(
         now.getFullYear(),
@@ -17,25 +45,30 @@ function updateTimer() {
     );
     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-    document.getElementById("hours").textContent = hours;
-    document.getElementById("minutes").textContent = minutes;
-    document.getElementById("seconds").textContent = seconds;
+    const hour = document.getElementById("hours");
+    const minute = document.getElementById("minutes");
+    const second = document.getElementById("seconds");
+
+    const oneDay = 60 * 60 * 24 * 1000;
+
+    if (now.getTime() >= prayerTimes1[3] && now.getTime() <= prayerTimes1[0] + oneDay) {
+        // Iftar time to next Farzr
+        hour.textContent = "00";
+        minute.textContent = "00";
+        second.textContent = "00";
+    } else {
+        hour.textContent = hours;
+        minute.textContent = minutes;
+        second.textContent = seconds;
+    }
 }
 
-// Function to update prayer times
-function updatePrayerTimes() {
+// Function to create 'prayerTimes' Div
+function createPrayerDiv() {
     const dhakaOffset = 6; // Bangladesh Standard Time (BST) is UTC+6
     const nowDhaka = new Date(
         new Date().getTime() + dhakaOffset * 60 * 60 * 1000
     ); // Getting current time in Dhaka
-
-    const prayerTimes = [
-        { name: "FAJR", time: "4:47AM" },
-        { name: "DHUHR", time: "12:09PM" },
-        { name: "ASR", time: "5: 21PM" },
-        { name: "MAGHRIB", time: "6:14PM" },
-        { name: "ESHA", time: "7:26PM" },
-    ];
 
     const prayerTimesDiv = document.getElementById("prayerTimes");
     prayerTimesDiv.innerHTML = "";
@@ -60,14 +93,13 @@ function updatePrayerTimes() {
             prayerMinute
         );
 
-        // Check if it's time for this prayer
-        if (
-            nowDhaka.getHours() === prayerHour &&
-            nowDhaka.getMinutes() >= prayerMinute &&
-            nowDhaka.getMinutes() <= prayerMinute + 5
-        ) {
-            div.classList.add("active");
-        }
+        // if (
+        //     nowDhaka.getHours() === prayerHour &&
+        //     nowDhaka.getMinutes() >= prayerMinute &&
+        //     nowDhaka.getMinutes() <= prayerMinute + 5
+        // ) {
+        //     div.classList.add("active");
+        // }
 
         const h5 = document.createElement("h5");
         h5.textContent = prayer.name;
@@ -82,15 +114,52 @@ function updatePrayerTimes() {
 
         prayerTimesDiv.appendChild(div);
     });
+
+}
+
+function markPrayer(num) {
+    const prayerTimesDiv = document.getElementById("prayerTimes");
+
+    for (let i = 0; i < 5; i++) {
+        prayerTimesDiv.children[i].children[1].classList.remove("active");
+    }
+
+    let targetElement = prayerTimesDiv.children[num].children[1];
+    targetElement.classList.add("active");
+}
+
+// Function to check if time for prayer
+function updatePrayers() {
+    const dhakaOffset = 6; // Bangladesh Standard Time (BST) is UTC+6
+    const nowDhaka = new Date(
+        new Date().getTime() + dhakaOffset * 60 * 60 * 1000
+    ); // Getting current time in Dhaka
+
+
+    let curTime = new Date().getTime();
+
+    if (curTime >= prayerTimes1[prayerTimes1.length - 1]) {
+        markPrayer(4);
+        // console.log("ESHA!!!");
+    } else {
+        let i = 0;
+        while (i < prayerTimes1.length - 2) {
+            if (curTime >= prayerTimes1[i] && curTime < prayerTimes1[i + 1]) {
+                markPrayer(i);
+            }
+            i++;
+        }
+    }
 }
 
 
-
 // Update timer and prayer times every second
+createPrayerDiv();
 setInterval(() => {
     updateTimer();
-    updatePrayerTimes();
+    updatePrayers();
 }, 1000);
+
 // Set the day dynamically
 const today = new Date();
 const ramadanStartDate = new Date(today.getFullYear(), today.getMonth(), 1); // Assuming Ramadan starts on the 1st day of the current month
