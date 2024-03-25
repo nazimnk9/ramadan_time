@@ -8,8 +8,18 @@ const prayerTimes = [
 
 let prayerTimes1;
 
-// Function to update prayer times
-function updatePrayerTimes() {
+// Function to update date
+function updateRamadan() {
+    const ramadan1 = new Date(2024, 2, 12, 4, 47, 0, 0);
+    const now = Date.now();
+    let diff = now - ramadan1.valueOf();
+    const oneDay = 60 * 60 * 24 * 1000;
+    let day = (diff / oneDay >> 0) + 1
+    document.getElementById("day").textContent = `${day} Ramadan`;
+}
+
+// Function to get prayer times
+function getPrayerTimes() {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth();
@@ -26,7 +36,8 @@ function updatePrayerTimes() {
 
 // Function to update the countdown timer
 function updateTimer() {
-    updatePrayerTimes();
+    getPrayerTimes();
+    updateRamadan();
 
     const now = new Date();
     const iftarTime = new Date(
@@ -159,11 +170,3 @@ setInterval(() => {
     updateTimer();
     updatePrayers();
 }, 1000);
-
-// Set the day dynamically
-const today = new Date();
-const ramadanStartDate = new Date(today.getFullYear(), today.getMonth(), 1); // Assuming Ramadan starts on the 1st day of the current month
-ramadanStartDate.setDate(ramadanStartDate.getDate() + 10); // Adding 10 days to get to the 11th day of Ramadan
-
-const day = ramadanStartDate.getDate();
-document.getElementById("day").textContent = `${day} Ramadan`;
