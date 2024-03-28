@@ -62,8 +62,11 @@ function updateTimer() {
 
     const oneDay = 60 * 60 * 24 * 1000;
 
-    if (now.getTime() >= prayerTimes1[3] && now.getTime() <= prayerTimes1[0] + oneDay) {
-        // Iftar time to next Farzr
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    let isMidnight = now.getTime() >= midnight.getTime() && now.getTime() <= prayerTimes1[0];
+    let afterIftar = now.getTime() >= prayerTimes1[3];
+
+    if (isMidnight || afterIftar) {
         hour.textContent = "00";
         minute.textContent = "00";
         second.textContent = "00";
