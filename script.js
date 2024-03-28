@@ -126,7 +126,7 @@ function markPrayer(num) {
     const prayerTimesDiv = document.getElementById("prayerTimes");
 
     for (let i = 0; i < 5; i++) {
-        prayerTimesDiv.children[i].children[1].classList.remove("active");
+        prayerTimesDiv.children[i].children[0].classList.remove("active");
     }
 
     let targetElement = prayerTimesDiv.children[num].children[0];
