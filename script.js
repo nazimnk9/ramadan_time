@@ -14,7 +14,7 @@ function updateRamadan() {
     const now = Date.now();
     let diff = now - ramadan1.valueOf();
     const oneDay = 60 * 60 * 24 * 1000;
-    let day = (diff / oneDay >> 0) + 1
+    let day = ((diff / oneDay) >> 0) + 1;
     document.getElementById("day").textContent = `${day} Ramadan`;
 }
 
@@ -144,8 +144,7 @@ function updatePrayers() {
     let curTime = new Date().getTime();
 
     if (curTime >= prayerTimes1[prayerTimes1.length - 1]) {
-        markPrayer(4);
-        // console.log("ESHA!!!");
+        markPrayer(prayerTimes1.length - 1); // mark ESHA
     } else {
         let i = 0;
         while (i < prayerTimes1.length - 2) {
