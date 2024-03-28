@@ -91,9 +91,8 @@ function createPrayerDiv() {
         const div = document.createElement("div");
         div.classList.add("details");
 
-        const input = document.createElement("input");
-        input.type = "radio";
-        input.name = "prayerTime";
+        const boxDiv = document.createElement("div");
+        boxDiv.classList.add('namaz_box');
 
         // Convert prayer time to Dhaka time
         const prayerTimeParts = prayer.time.split(":");
@@ -107,14 +106,6 @@ function createPrayerDiv() {
             prayerMinute
         );
 
-        // if (
-        //     nowDhaka.getHours() === prayerHour &&
-        //     nowDhaka.getMinutes() >= prayerMinute &&
-        //     nowDhaka.getMinutes() <= prayerMinute + 5
-        // ) {
-        //     div.classList.add("active");
-        // }
-
         const h5 = document.createElement("h5");
         h5.textContent = prayer.name;
 
@@ -122,7 +113,7 @@ function createPrayerDiv() {
         p.classList.add("timing");
         p.textContent = prayer.time;
 
-        div.appendChild(input);
+        div.appendChild(boxDiv);
         div.appendChild(h5);
         div.appendChild(p);
 
@@ -138,7 +129,7 @@ function markPrayer(num) {
         prayerTimesDiv.children[i].children[1].classList.remove("active");
     }
 
-    let targetElement = prayerTimesDiv.children[num].children[1];
+    let targetElement = prayerTimesDiv.children[num].children[0];
     targetElement.classList.add("active");
 }
 

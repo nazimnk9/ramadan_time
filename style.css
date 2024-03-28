@@ -34,7 +34,7 @@ a{
 
 .main{
     position: absolute;
-    top: 42%;
+    top: 43.5%;
     left: 50%;
     transform: translate(-50%,-50%);
     text-align: center;
@@ -91,16 +91,16 @@ a{
 
 .namaz_time .details{
     text-align: center;
-    margin-top: 32px;
+    margin-top: 30px;
     position: relative;
 }
 
 .namaz_time .details::after{
     width: 37px;
     height: 2px;
-    background: #777;
+    background: #2b2b2b;
     position: absolute;
-    top: -52%;
+    top: -46%;
     left: 50%;
     content: "";
     transform: translate(44%,50%);
@@ -109,7 +109,6 @@ a{
 .namaz_time .details:last-child::after{
     display: none;
 }
-
 .details input[type="radio"]{
     display: none;
 }
@@ -130,50 +129,24 @@ a{
     display: flex;
     justify-content: center;
 }
-  
-.details h5::before {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: transparent;
-    border: 2px solid #777;
-    top: -100%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    transition: border-color 400ms ease;
-}
-  
-.details h5::after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #8eff8a;
-    border: 2px solid #8eff8a;
-    top: -100%;
-    left: 50%;
-    transform: translate(-50%,-50%) scale(0);
-    transition: transform 400ms ease;
-}
-  
-input[type="radio"]:checked + h5::before {
-    border-color: #8eff8a;
-}
-  
-input[type="radio"]:checked + h5::after {
-    transform: translateY(-50%) scale(1);
-}
 
-.details.active h5::before {
-    background-color: #8eff8a; /* Change to your desired color */
-    border-color: #8eff8a;
+.namaz_box {
+	width: 20px;
+	height: 20px;
+	border: 2px solid #777;
+    background: transparent;
+	position: absolute;
+	top: -70%;
+	left: 50%;
+	transform: translate(-50%);
+    cursor: pointer;
 }
+  
 
 /* separate individual class */
 .active {
-    background-color: #8eff8a;
-    border-color: #8eff8a;
+    background: #5bea3d;
+    border: 2px solid #777;
 }
 
 
