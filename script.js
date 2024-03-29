@@ -147,7 +147,7 @@ function updatePrayers() {
         markPrayer(prayerTimes1.length - 1); // mark ESHA
     } else {
         let i = 0;
-        while (i < prayerTimes1.length - 2) {
+        while (i <= prayerTimes1.length - 2) {
             if (curTime >= prayerTimes1[i] && curTime < prayerTimes1[i + 1]) {
                 markPrayer(i);
             }
