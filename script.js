@@ -1,12 +1,68 @@
-const prayerTimes = [
-    { name: "FAJR", time: "4:47AM" },
-    { name: "DHUHR", time: "12:09PM" },
-    { name: "ASR", time: "5:21PM" },
-    { name: "MAGHRIB", time: "6:14PM" },
-    { name: "ESHA", time: "7:26PM" },
-];
+const prayerNames = ['FAJR', 'DHUHR', 'ASR', 'MAGHRIB', 'ISHA'];
+let prayerTimes;
+let prayerTimesAsMS;
 
-let prayerTimes1;
+const isSameDate = (readableDate) => {
+    // const dhakaOffset = 6; // Bangladesh Standard Time (BST) is UTC+6
+    // let today = new Date(new Date().getTime() + dhakaOffset * 60 * 60 * 1000); // Getting current time in Dhaka
+    let today = new Date();
+    let date = new Date(readableDate);
+    let result = date.toDateString() === today.toDateString();
+
+    return result;
+}
+
+const convertToDate = (timings, today) => {
+    let year = today.getFullYear();
+    let month = today.getMonth();
+    let date = today.getDate();
+
+    let fajar = timings.Fajr.split(' ')[0];
+    fajar = fajar.split(':').map(Number);
+
+    let dhuhr = timings.Dhuhr.split(' ')[0];
+    dhuhr = dhuhr.split(':').map(Number);
+
+    let asr = timings.Asr.split(' ')[0];
+    asr = asr.split(':').map(Number);
+
+    let maghrib = timings.Maghrib.split(' ')[0];
+    maghrib = maghrib.split(':').map(Number);
+
+    let isha = timings.Isha.split(' ')[0];
+    isha = isha.split(':').map(Number);
+
+    fajar = new Date(year, month, date, fajar[0], fajar[1]);
+    dhuhr = new Date(year, month, date, dhuhr[0], dhuhr[1]);
+    asr = new Date(year, month, date, asr[0], asr[1]);
+    maghrib = new Date(year, month, date, maghrib[0], maghrib[1]);
+    isha = new Date(year, month, date, isha[0], isha[1]);
+
+    prayerTimes = [fajar, dhuhr, asr, maghrib, isha];
+    prayerTimesAsMS = [fajar.getTime(), dhuhr.getTime(), asr.getTime(), maghrib.getTime(), isha.getTime()];
+
+    // console.log(prayerTimes);
+    // console.log(prayerTimesAsMS);
+}
+
+const fetchPrayerAPI = async () => {
+    await fetch(`https://api.aladhan.com/v1/calendarByCity?country=BD&city=Dhaka`)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+        }).then((prayer) => {
+            for (let prayerData of prayer.data) {
+                let readableDate = prayerData.date.readable;
+
+                if (isSameDate(readableDate)) {
+                    let timings = prayerData.timings;
+                    let today = new Date(readableDate);
+                    convertToDate(timings, today);
+                }
+            }
+        });
+}
 
 // Function to update date
 function updateRamadan() {
@@ -18,36 +74,12 @@ function updateRamadan() {
     document.getElementById("day").textContent = `${day} Ramadan`;
 }
 
-// Function to get prayer times
-function getPrayerTimes() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const date = today.getDate();
-
-    const fajar = new Date(year, month, date, 4, 47, 0, 0);
-    const dhuhr = new Date(year, month, date, 12, 9, 0, 0);
-    const asr = new Date(year, month, date, 12 + 5, 21, 0, 0);
-    const magrib = new Date(year, month, date, 12 + 6, 14, 0, 0);
-    const esha = new Date(year, month, date, 12 + 7, 26, 0, 0);
-
-    prayerTimes1 = [fajar.getTime(), dhuhr.getTime(), asr.getTime(), magrib.getTime(), esha.getTime()];
-}
-
 // Function to update the countdown timer
 function updateTimer() {
-    getPrayerTimes();
     updateRamadan();
 
     const now = new Date();
-    const iftarTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        18,
-        14,
-        0
-    ); // Assuming Iftar is at 6:14 PM
+    let iftarTime = prayerTimes[3];
 
     const timeDifference = iftarTime - now;
     const hours = Math.floor(timeDifference / (1000 * 60 * 60));
@@ -63,8 +95,8 @@ function updateTimer() {
     const oneDay = 60 * 60 * 24 * 1000;
 
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    let isMidnight = now.getTime() >= midnight.getTime() && now.getTime() <= prayerTimes1[0];
-    let afterIftar = now.getTime() >= prayerTimes1[3];
+    let isMidnight = now.getTime() >= midnight.getTime() && now.getTime() <= prayerTimesAsMS[0];
+    let afterIftar = now.getTime() >= prayerTimesAsMS[3];
 
     if (isMidnight || afterIftar) {
         hour.textContent = "00";
@@ -80,38 +112,32 @@ function updateTimer() {
 // Function to create 'prayerTimes' Div
 function createPrayerDiv() {
     const dhakaOffset = 6; // Bangladesh Standard Time (BST) is UTC+6
-    const nowDhaka = new Date(
-        new Date().getTime() + dhakaOffset * 60 * 60 * 1000
-    ); // Getting current time in Dhaka
+    // const nowDhaka = new Date(
+    // new Date().getTime() + dhakaOffset * 60 * 60 * 1000
+    // ); // Getting current time in Dhaka
+    let nowDhaka = new Date();
 
     const prayerTimesDiv = document.getElementById("prayerTimes");
     prayerTimesDiv.innerHTML = "";
 
-    prayerTimes.forEach((prayer) => {
+    prayerTimes.forEach((prayer, index) => {
         const div = document.createElement("div");
         div.classList.add("details");
 
         const boxDiv = document.createElement("div");
         boxDiv.classList.add('namaz_box');
 
-        // Convert prayer time to Dhaka time
-        const prayerTimeParts = prayer.time.split(":");
-        const prayerHour = parseInt(prayerTimeParts[0], 10);
-        const prayerMinute = parseInt(prayerTimeParts[1], 10);
-        const prayerTimeDhaka = new Date(
-            nowDhaka.getFullYear(),
-            nowDhaka.getMonth(),
-            nowDhaka.getDate(),
-            prayerHour,
-            prayerMinute
-        );
-
         const h5 = document.createElement("h5");
-        h5.textContent = prayer.name;
+        h5.textContent = prayerNames[index];
 
         const p = document.createElement("p");
         p.classList.add("timing");
-        p.textContent = prayer.time;
+        let hour = prayer.getHours();
+        let minute = prayer.getMinutes().toString().padStart(2, '0');
+        let meridiem = `${hour < 12 ? 'AM' : 'PM'}`;
+
+        let time = `${hour <= 12 ? hour : hour - 12}:${minute} ${meridiem}`;
+        p.textContent = time;
 
         div.appendChild(boxDiv);
         div.appendChild(h5);
@@ -143,12 +169,12 @@ function updatePrayers() {
 
     let curTime = new Date().getTime();
 
-    if (curTime >= prayerTimes1[prayerTimes1.length - 1]) {
-        markPrayer(prayerTimes1.length - 1); // mark ESHA
+    if (curTime >= prayerTimesAsMS[prayerTimesAsMS.length - 1]) {
+        markPrayer(prayerTimesAsMS.length - 1); // mark ISHA
     } else {
         let i = 0;
-        while (i <= prayerTimes1.length - 2) {
-            if (curTime >= prayerTimes1[i] && curTime < prayerTimes1[i + 1]) {
+        while (i <= prayerTimesAsMS.length - 2) {
+            if (curTime >= prayerTimesAsMS[i] && curTime < prayerTimesAsMS[i + 1]) {
                 markPrayer(i);
             }
             i++;
@@ -156,10 +182,24 @@ function updatePrayers() {
     }
 }
 
+// Fetch API data
+const handleAPI = async () => {
+    await fetchPrayerAPI();
+    console.log("Fetched Data", prayerTimes);
+
+    createPrayerDiv();
+
+    // Update timer and prayer times every second
+    setInterval(() => {
+        updateTimer();
+        updatePrayers();
+    }, 1000);
+}
+handleAPI();
 
 // Update timer and prayer times every second
-createPrayerDiv();
-setInterval(() => {
-    updateTimer();
-    updatePrayers();
-}, 1000);
+// createPrayerDiv();
+// setInterval(() => {
+//     updateTimer();
+//     updatePrayers();
+// }, 1000);
