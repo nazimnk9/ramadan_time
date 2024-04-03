@@ -182,6 +182,11 @@ function updatePrayers() {
     }
 }
 
+const isNewMonth = () => {
+    const now = new Date();
+    return now.getHours() == 0 && now.getMinutes() == 0 && now.getSeconds() === 0 && now.getDate() == 1;
+}
+
 // Fetch API data
 const handleAPI = async () => {
     await fetchPrayerAPI();
@@ -190,16 +195,14 @@ const handleAPI = async () => {
     createPrayerDiv();
 
     // Update timer and prayer times every second
-    setInterval(() => {
+    setInterval(async () => {
         updateTimer();
         updatePrayers();
+
+        // If new month starts fetch API
+        if (isNewMonth()) {
+            await fetchPrayerAPI();
+        }
     }, 1000);
 }
 handleAPI();
-
-// Update timer and prayer times every second
-// createPrayerDiv();
-// setInterval(() => {
-//     updateTimer();
-//     updatePrayers();
-// }, 1000);
