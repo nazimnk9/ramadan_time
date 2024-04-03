@@ -34,7 +34,7 @@ const convertToDate = (timings, today) => {
 
     fajar = new Date(year, month, date, fajar[0], fajar[1]);
     dhuhr = new Date(year, month, date, dhuhr[0], dhuhr[1]);
-    asr = new Date(year, month, date, asr[0], asr[1]);
+    asr = new Date(year, month, date, asr[0] + 1, asr[1]);
     maghrib = new Date(year, month, date, maghrib[0], maghrib[1]);
     isha = new Date(year, month, date, isha[0], isha[1]);
 
