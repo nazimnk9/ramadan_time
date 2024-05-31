@@ -2,9 +2,9 @@
 
 ### This project is based on JavaScript
 
-**📌 Prayer Times**<br>
-**📌 Iftar Counter**<br>
-**📌 Dynamic Webpage**
+**📌 Iftar Countdown Timer**<br>
+**📌 Prayer Timer**<br>
+**📌 API Integration**
 
 
 ### </> Languages
